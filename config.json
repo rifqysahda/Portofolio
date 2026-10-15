@@ -1,0 +1,26 @@
+{
+  "profileImg": "https://cdn.phototourl.com/member/2026-10-11-70e8471c-95ca-4438-a083-5388ecaabd21.jpg",
+  "name": "RIFQY SP",
+  "title": "Digital Enthusiast",
+  "bio": "Halo! Saya adalah seorang yang sangat antusias dan berdedikasi di dunia digital. Saya memiliki ketertarikan kuat dalam mengikuti perkembangan teknologi terbaru, mengelola berbagai aset digital, serta memanfaatkan platform modern untuk menciptakan solusi yang kreatif, inovatif, dan relevan dengan kebutuhan masa kini.",
+  "ig": "https://instagram.com/rifqysahda_id",
+  "telegram": "https://t.me/flyterr",
+  "wa": "https://wa.me/6285129217113",
+  "audioUrl": "https://running-harlequin-f0xdwmck.edgeone.dev/",
+  "priceStarter": "75000",
+  "pricePro": "150000",
+  "jobs": [
+    { "company": "Wartegrt03", "position": "Waiters", "desc": "Melayani pelanggan, mencatat pesanan, dan memastikan kebersihan area makan agar tetap nyaman.", "img": "https://files.catbox.moe/3q7r0f.jpg" },
+    { "company": "Bakso Malang Cakno", "position": "Pelayan", "desc": "Bertanggung jawab menyajikan makanan kepada pelanggan dengan cepat dan ramah, serta merapikan meja.", "img": "https://files.catbox.moe/mn44p1.jpg" },
+    { "company": "Imazing Play Station", "position": "Operator / Admin", "desc": "Mengatur waktu penyewaan konsol, melayani transaksi pelanggan, dan menjaga kebersihan fasilitas rental.", "img": "https://files.catbox.moe/rcdwr7.jpg" },
+    { "company": "Chikenday", "position": "Crew Outlet", "desc": "Menyiapkan pesanan makanan cepat saji, menjaga standar operasional dapur, dan melayani pembeli.", "img": "https://files.catbox.moe/jxnvep.jpg" },
+    { "company": "Resto Bebek Khanoman", "position": "Waiters / Kitchen Support", "desc": "Membantu kelancaran operasional restoran di area makan, mengatur penempatan tamu, dan berkoordinasi dengan tim dapur.", "img": "https://files.catbox.moe/0xndwc.jpg" },
+    { "company": "PT Hadma Mulia Berkah", "position": "Staff", "desc": "Mengerjakan tugas-tugas administratif dan operasional harian perusahaan sesuai dengan arahan manajemen.", "img": "https://files.catbox.moe/zp2va0.jpg" },
+    { "company": "Brand Blessaluna", "position": "PIC", "desc": "Bertanggung jawab penuh atas kegiatan operasional harian, mengelola tim, serta mengawasi kelancaran promosi dan pencapaian target penjualan dari perusahaan.", "img": "" }
+  ],
+  "store": [
+    { "title": "Capcut Pro", "desc": "Aplikasi Edit Video Pro", "price": "20000", "img": "https://placehold.co/80x80/000000/ffffff?text=Capcut" },
+    { "title": "YouTube Premium", "desc": "Bebas Iklan & Background Play", "price": "25000", "img": "https://placehold.co/80x80/ff0000/ffffff?text=YT+Pro" },
+    { "title": "Canva Pro", "desc": "Akses Semua Template Premium", "price": "30000", "img": "https://placehold.co/80x80/06b6d4/ffffff?text=Canva" }
+  ]
+}
