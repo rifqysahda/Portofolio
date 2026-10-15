@@ -1,5 +1,5 @@
 {
-  "profileImg": "https://cdn.phototourl.com/member/2026-10-11-70e8471c-95ca-4438-a083-5388ecaabd21.jpg",
+  "profileImg": "",
   "name": "RIFQY SP",
   "title": "Digital Enthusiast",
   "bio": "Halo! Saya adalah seorang yang sangat antusias dan berdedikasi di dunia digital. Saya memiliki ketertarikan kuat dalam mengikuti perkembangan teknologi terbaru, mengelola berbagai aset digital, serta memanfaatkan platform modern untuk menciptakan solusi yang kreatif, inovatif, dan relevan dengan kebutuhan masa kini.",
@@ -51,6 +51,12 @@
       "position": "PIC",
       "desc": "Bertanggung jawab penuh atas kegiatan operasional harian, mengelola tim, serta mengawasi kelancaran promosi dan pencapaian target penjualan dari perusahaan.",
       "img": ""
+    },
+    {
+      "company": "Test",
+      "position": "test",
+      "desc": "Testtwr admin panel",
+      "img": "https://cdn.phototourl.com/member/2026-10-11-70e8471c-95ca-4438-a083-5388ecaabd21.jpg"
     }
   ],
   "store": [
@@ -71,6 +77,12 @@
       "desc": "Akses Semua Template Premium",
       "price": "30000",
       "img": "https://placehold.co/80x80/06b6d4/ffffff?text=Canva"
+    },
+    {
+      "title": "tester",
+      "price": "200.000",
+      "desc": "tester",
+      "img": "https://cdn.phototourl.com/member/2026-10-11-70e8471c-95ca-4438-a083-5388ecaabd21.jpg"
     }
   ]
 }
