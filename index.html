@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Dashboard - Programmer Theme</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { poppins: ['Poppins', 'sans-serif'], },
+                    colors: { brand: { light: '#38bdf8', DEFAULT: '#2563eb', dark: '#0f172a', } }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* TEMA PROGRAMMER DARK (SLATE) - BEBAS LAG */
+        body {
+            background-color: #0f172a; /* Slate 900 - Biru gelap programmer */
+            color: #f8fafc;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden; margin: 0; padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* SCROLLBAR CUSTOM */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        main { scroll-behavior: smooth; }
+
+        /* PANEL SOLID (PENGGANTI GLASS AGAR TIDAK LAG) */
+        .glass-panel {
+            background-color: #1e293b; /* Slate 800 */
+            border: 1px solid rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .inner-glass {
+            background-color: #0f172a; /* Slate 900 */
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* PERLANCAR SCROLLING HORIZONTAL DI HP */
+        .smooth-scroll-x {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch; /* Sangat penting untuk iOS/Mobile */
+            scroll-behavior: smooth;
+        }
+
+        .content-section { display: block; margin-bottom: 2rem; }
+        .content-section:last-child { margin-bottom: 1rem; }
+
+        .nav-item { cursor: pointer; transition: all 0.3s ease; position: relative; color: #94a3b8; }
+        .glass-nav-icon {
+            background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover .glass-nav-icon, .nav-item.active .glass-nav-icon {
+            background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);
+            transform: translateY(-2px);
+        }
+        .nav-item:hover, .nav-item.active { color: #38bdf8; }
+        .nav-item.active .glass-nav-icon i { text-shadow: 0 0 10px rgba(56,189,248,0.5); }
+
+        .action-btn { background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); color: #38bdf8; padding: 8px 16px; border-radius: 999px; font-size: 12px; font-weight: 600; transition: all 0.2s ease; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+        .action-btn:hover { background: #38bdf8; color: #0f172a; }
+
+        .toast-notification { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(100px); background: #10b981; color: white; padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 600; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); z-index: 9999; opacity: 0; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        .toast-notification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+        .live-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; box-shadow: 0 0 8px #22c55e; animation: livePulse 1.5s infinite; }
+        @keyframes livePulse { 0% { opacity: 0.4; } 50% { opacity: 1; } 100% { opacity: 0.4; } }
+
+        /* KOLOM PENCARIAN (Tanpa Blur) */
+        .search-container {
+            position: relative; width: 100%; max-width: 250px; margin: 0; 
+            border-radius: 9999px;
+            background: #0f172a;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.1);
+            animation: searchPulse 3s infinite alternate ease-in-out;
+            z-index: 10;
+        }
+        @keyframes searchPulse {
+            0% { box-shadow: 0 0 5px rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3); }
+            100% { box-shadow: 0 0 15px rgba(56, 189, 248, 0.3); border-color: rgba(56, 189, 248, 0.8); }
+        }
+
+        /* ANIMASI TECH STACK */
+        .marquee-container { display: flex; flex-direction: column; gap: 1.2rem; overflow: hidden; position: relative; width: 100%; max-width: 100%; padding: 1rem 0; mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent); }
+        .marquee-track { display: flex; gap: 1.2rem; width: max-content; }
+        .marquee-track.left { animation: scroll-left 30s linear infinite; }
+        .marquee-track.right { animation: scroll-right 30s linear infinite; }
+        .marquee-track.fast { animation: scroll-left 20s linear infinite; }
+        .marquee-track:hover { animation-play-state: paused; }
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes scroll-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        
+        .tech-card { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.05); padding: 10px 16px; border-radius: 16px; display: flex; align-items: center; gap: 10px; min-width: 170px; max-width: 220px; position: relative; z-index: 1; }
+
+        #naruto-runner { position: fixed; bottom: 20px; left: -150px; width: 100px; z-index: 9999; pointer-events: none; animation: narutoRun 12s linear infinite; }
+        @keyframes narutoRun { 0% { left: -150px; transform: scaleX(1); } 45% { left: 105vw; transform: scaleX(1); } 50% { left: 105vw; transform: scaleX(-1); } 95% { left: -150px; transform: scaleX(-1); } 100% { left: -150px; transform: scaleX(1); } }
+
+        .modal-overlay-anim { opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s ease; }
+        .modal-overlay-anim.show { opacity: 1; visibility: visible; }
+        .modal-box-anim { opacity: 0; transform: scale(0.95); transition: all 0.2s ease; }
+        .modal-overlay-anim.show .modal-box-anim { opacity: 1; transform: scale(1); }
+
+        .music-btn-glow { position: relative; transition: all 0.2s ease; }
+        .sound-wave-active { animation: soundEmitWave 0.7s infinite alternate ease-in-out; color: #38bdf8 !important; }
+        @keyframes soundEmitWave { 0% { transform: scale(0.95); } 100% { transform: scale(1.15); } }
+        .sound-wave-off { color: #94a3b8 !important; }
+
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex justify-center items-center">
+
+    <!-- MUSIK -->
+    <audio id="bgMusic" loop>
+        <source id="audioSource" src="https://www.image2url.com/r2/default/audio/1792083112585-dfa9d872-3846-4496-aab8-e2fdfa82f889.mp3">
+    </audio>
+
+    <img id="naruto-runner" src="https://c.tenor.com/2wPxY0-P0RMAAAAj/naruto-run.gif" alt="Naruto Running">
+
+    <div id="toastMessage" class="toast-notification">
+        <i class="ph-fill ph-check-circle text-xl"></i>
+        <span id="toastText">Berhasil!</span>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="adminLoginModal" class="fixed inset-0 z-[1000] bg-[#0f172a]/90 flex items-center justify-center p-4 modal-overlay-anim">
+        <div class="modal-box-anim glass-panel p-8 rounded-3xl w-full max-w-sm border border-brand-light/20 text-center relative">
+            <div class="w-16 h-16 bg-brand-light/10 border border-brand-light/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="ph-fill ph-lock-key text-3xl text-brand-light animate-pulse"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2 text-white tracking-wide">Admin Access</h3>
+            <p class="text-xs text-slate-400 mb-6">Masukkan password untuk mengelola portofolio.</p>
+            <input type="password" id="adminPasswordInput" placeholder="••••••••" class="w-full bg-[#0f172a] border border-white/10 rounded-xl px-4 py-3 text-white text-center text-lg tracking-widest mb-6 focus:outline-none focus:border-brand-light transition-all">
+            <div class="flex gap-3">
+                <button onclick="verifyAdmin()" class="flex-1 bg-brand-DEFAULT hover:bg-brand-light text-white text-sm font-bold py-3 rounded-xl transition-all cursor-pointer">Login</button>
+                <button onclick="closeAdminLogin()" class="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm font-bold py-3 rounded-xl transition-all cursor-pointer">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN EDITOR DASHBOARD MODAL -->
+    <div id="adminDashboardModal" class="fixed inset-0 z-[1000] bg-[#0f172a]/95 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel p-6 md:p-8 rounded-3xl w-full max-w-3xl border border-brand-light/20 relative my-auto max-h-[90vh] overflow-y-auto custom-scrollbar">
+            
+            <!-- HEADER PANEL KONTROL (TIDAK MENGAMBANG) -->
+            <div class="flex justify-between items-center mb-6 border-b border-white/10 pb-4 px-2">
+                <div>
+                    <h3 class="text-2xl font-bold text-white flex items-center gap-2"><i class="ph-fill ph-sliders text-brand-light animate-[spin_4s_linear_infinite]"></i> Panel Kontrol</h3>
+                    <p class="text-xs text-slate-400 mt-1">Kelola konten (Mode Cepat Bebas Lag).</p>
+                </div>
+                <button onclick="closeAdminDashboard()" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-red-500 hover:text-white text-slate-300 transition-all cursor-pointer"><i class="ph-bold ph-x text-lg"></i></button>
+            </div>
+            
+            <div class="space-y-6 text-left px-2 pb-4">
+                
+                <!-- 0. INTEGRASI GITHUB API -->
+                <div class="bg-[#0f172a] p-5 rounded-2xl border border-brand-light/20">
+                    <label class="text-sm text-brand-light font-bold mb-3 block uppercase tracking-wider flex items-center gap-2">
+                        <i class="ph-fill ph-github-logo text-lg"></i> Konfigurasi GitHub API (Sync)
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">GitHub Username:</label><input type="text" id="ghUsername" placeholder="Username" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Nama Repository:</label><input type="text" id="ghRepo" placeholder="Nama Repo" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">GitHub PAT:</label><input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- 1. PROFIL -->
+                <div class="bg-[#0f172a] p-5 rounded-2xl border border-white/5">
+                    <label class="text-sm text-brand-light font-bold mb-3 block uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-user"></i> 1. Info Profil Utama</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">URL Foto Profil:</label><input type="text" id="editProfileImg" placeholder="https://..." class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Nama Profil:</label><input type="text" id="editProfileName" placeholder="Nama Anda" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                    </div>
+                </div>
+                
+                <!-- 2. LINK SOSMED & AUDIO -->
+                <div class="bg-[#0f172a] p-5 rounded-2xl border border-white/5">
+                    <label class="text-sm text-brand-light font-bold mb-3 block uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-link"></i> 2. Link Sosial Media & Audio</label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Instagram:</label><input type="text" id="editIg" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Telegram:</label><input type="text" id="editTelegram" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">WhatsApp:</label><input type="text" id="editWa" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                    </div>
+                    <div><label class="text-[10px] text-slate-400 mb-1 block">Link Musik Latar (.mp3):</label><input type="text" id="editAudioUrl" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                </div>
+
+                <!-- 3. HARGA PORTOFOLIO -->
+                <div class="bg-[#0f172a] p-5 rounded-2xl border border-white/5">
+                    <label class="text-sm text-brand-light font-bold mb-3 block uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-laptop"></i> 3. Harga Jasa Portofolio</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Harga Starter (Angka Saja):</label><input type="number" id="editPriceStarter" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Harga Pro (Angka Saja):</label><input type="number" id="editPricePro" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- 4. MANAJEMEN STORE -->
+                <div class="bg-[#0f172a] p-5 rounded-2xl border border-white/5">
+                    <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-3">
+                        <label class="text-sm text-brand-light font-bold block uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-shopping-bag"></i> 4. Produk Store Digital</label>
+                        <button onclick="addAdminStoreItem()" class="bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-slate-900 text-[10px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 border border-emerald-500/30">
+                            <i class="ph-bold ph-plus"></i> Tambah Produk
+                        </button>
+                    </div>
+                    <div id="adminStoreContainer" class="space-y-4"></div>
+                </div>
+
+                <!-- 5. PENGATURAN PASSWORD ADMIN -->
+                <div class="bg-[#0f172a] p-5 rounded-2xl border border-rose-500/20">
+                    <label class="text-sm text-rose-400 font-bold mb-3 block uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-lock-key"></i> 5. Ubah Password Admin</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Password Lama:</label><input type="password" id="editOldPassword" placeholder="Wajib jika diubah" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                        <div><label class="text-[10px] text-slate-400 mb-1 block">Password Baru:</label><input type="password" id="editNewPassword" placeholder="Kosongkan jika tidak" class="w-full bg-[#1e293b] border border-white/5 rounded-xl px-3 py-2.5 text-white text-xs"></div>
+                    </div>
+                </div>
+
+                <!-- TOMBOL SIMPAN -->
+                <div class="mt-8 flex justify-end">
+                    <button onclick="saveAdminChanges()" class="w-full md:w-auto bg-brand-DEFAULT hover:bg-brand-light text-white text-sm font-bold px-10 py-4 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2">
+                        <i class="ph-bold ph-floppy-disk text-lg"></i> Simpan Perubahan
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QRIS CHECKOUT MODAL -->
+    <div id="qrisCheckoutModal" class="fixed inset-0 z-[1050] bg-[#0f172a]/95 hidden flex items-center justify-center p-4">
+        <div class="glass-panel p-6 rounded-3xl w-full max-w-sm border border-brand-light/20 text-center relative flex flex-col items-center">
+            <h3 class="font-bold text-lg mb-2 text-white tracking-wider flex items-center gap-2"><i class="ph-fill ph-qr-code text-brand-light"></i> QRIS Checkout</h3>
+            <p id="qrisOrderTitle" class="text-xs text-brand-light font-medium mb-4">Item Name</p>
+            <div class="p-3 bg-white rounded-2xl mb-3">
+                <img id="qrisImageSrc" src="https://cdn.phototourl.com/member/2026-10-11-e29e55d7-a457-4c12-833e-ec4e9ab9b64f.jpg" alt="QRIS" class="w-48 h-48 md:w-56 md:h-56 object-cover rounded-xl border border-slate-200">
+            </div>
+            <button onclick="downloadQrisImage()" class="action-btn text-xs px-4 py-1.5 mb-4 cursor-pointer"><i class="ph-bold ph-download-simple"></i> Unduh QRIS</button>
+            <div class="bg-[#0f172a] border border-white/5 rounded-xl p-3 w-full mb-4 text-left text-xs space-y-1">
+                <div class="flex justify-between"><span class="text-slate-400">Total:</span><span id="qrisPriceText" class="font-bold text-brand-light">Rp 0</span></div>
+                <div class="flex justify-between"><span class="text-slate-400">Status:</span><span class="font-bold text-amber-400 animate-pulse">Menunggu...</span></div>
+            </div>
+            <div class="w-full flex gap-3">
+                <button onclick="confirmManualPayment()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-2.5 rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 cursor-pointer"><i class="ph-bold ph-whatsapp-logo text-base"></i> Konfirmasi</button>
+                <button onclick="closeQrisModal()" class="flex-1 bg-white/10 hover:bg-white/20 text-white font-semibold py-2.5 rounded-xl text-xs transition-all cursor-pointer">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="w-full h-full md:w-[95vw] md:h-[90vh] max-w-7xl md:rounded-3xl flex flex-col md:flex-row relative z-10 overflow-hidden">
+        
+        <!-- SIDEBAR / BOTTOM NAV -->
+        <aside class="glass-panel w-full md:w-28 lg:w-64 md:border-r border-t md:border-t-0 border-white/5 flex flex-row md:flex-col justify-between md:justify-start order-2 md:order-1 z-50 rounded-t-2xl md:rounded-t-none md:rounded-l-3xl absolute bottom-0 md:relative h-[80px] md:h-full pb-2 md:pb-0">
+            <nav class="flex flex-row md:flex-col w-full h-full md:h-auto md:mt-8 md:px-3 lg:px-4 justify-around md:justify-start items-center md:items-stretch pt-2 md:pt-0">
+                <div onclick="switchTab('profil', this)" class="nav-item active flex flex-col lg:flex-row items-center md:mb-4 lg:mb-2 w-full lg:w-auto h-full md:h-auto font-medium group">
+                    <div class="glass-nav-icon w-10 h-10 md:w-12 md:h-12 lg:w-10 lg:h-10 lg:mr-3 mb-1 lg:mb-0"><i class="ph ph-user text-[22px]"></i></div><span class="text-[10px] md:text-xs lg:text-sm font-semibold tracking-wide whitespace-nowrap">Profil</span>
+                </div>
+                <div onclick="switchTab('store', this)" class="nav-item flex flex-col lg:flex-row items-center md:mb-4 lg:mb-2 w-full lg:w-auto h-full md:h-auto font-medium group">
+                    <div class="glass-nav-icon w-10 h-10 md:w-12 md:h-12 lg:w-10 lg:h-10 lg:mr-3 mb-1 lg:mb-0"><i class="ph ph-shopping-bag-open text-[22px]"></i></div><span class="text-[10px] md:text-xs lg:text-sm font-semibold tracking-wide whitespace-nowrap">Store</span>
+                </div>
+                <div onclick="switchTab('jasaportofolio', this)" class="nav-item flex flex-col lg:flex-row items-center md:mb-4 lg:mb-2 w-full lg:w-auto h-full md:h-auto font-medium group">
+                    <div class="glass-nav-icon w-10 h-10 md:w-12 md:h-12 lg:w-10 lg:h-10 lg:mr-3 mb-1 lg:mb-0"><i class="ph ph-laptop text-[22px]"></i></div><span class="text-[10px] md:text-xs lg:text-sm font-semibold tracking-wide whitespace-nowrap">Jasa Porto</span>
+                </div>
+                <div onclick="switchTab('techstack', this)" class="nav-item flex flex-col lg:flex-row items-center md:mb-4 lg:mb-2 w-full lg:w-auto h-full md:h-auto font-medium group">
+                    <div class="glass-nav-icon w-10 h-10 md:w-12 md:h-12 lg:w-10 lg:h-10 lg:mr-3 mb-1 lg:mb-0"><i class="ph ph-cpu text-[22px]"></i></div><span class="text-[10px] md:text-xs lg:text-sm font-semibold tracking-wide whitespace-nowrap">Tech</span>
+                </div>
+            </nav>
+        </aside>
+
+        <main id="main-scroll" class="glass-panel flex-1 h-[calc(100vh-80px)] md:h-full overflow-y-auto hide-scrollbar order-1 md:order-2 rounded-b-none md:rounded-l-none md:rounded-r-3xl p-6 md:p-10 pb-28 md:pb-10 relative">
+            
+            <section id="profil" class="content-section" style="margin-bottom: 1.5rem;">
+                <div class="flex justify-center w-full">
+                    <!-- Kartu Profil -->
+                    <div class="w-full max-w-sm flex flex-col items-center p-6 inner-glass rounded-2xl text-center relative shrink-0">
+                        <img id="displayProfileImg" src="https://cdn.phototourl.com/member/2026-10-11-70e8471c-95ca-4438-a083-5388ecaabd21.jpg" alt="Profile" class="w-32 h-32 rounded-full object-cover border-4 border-brand-light shadow-[0_0_15px_rgba(56,189,248,0.2)] mb-4">
+                        <h3 id="displayProfileName" class="text-xl font-bold mb-1 text-white tracking-wide">RIFQY SP</h3>
+                        
+                        <div class="w-full bg-[#1e293b] border border-white/5 rounded-xl p-3 flex flex-col items-center justify-center mb-4 relative overflow-hidden">
+                            <div class="flex items-center gap-2 relative z-10"><div class="live-dot"></div><span class="text-sm font-bold text-brand-light font-mono tracking-widest" id="timeDisplay">00:00:00 WIB</span></div>
+                            <span class="text-[10px] text-slate-400 mt-1 uppercase tracking-wider relative z-10" id="dateDisplay">Senin, 1 Jan 2026</span>
+                        </div>
+
+                        <div class="flex items-center justify-center gap-3 w-full mb-2">
+                            <button onclick="openAdminLogin()" class="flex-1 bg-[#1e293b] border border-white/5 hover:border-brand-light/50 text-white py-2.5 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer group">
+                                <i class="ph-bold ph-gear text-lg text-brand-light animate-[spin_3s_linear_infinite] group-hover:text-white transition-colors"></i><span>Admin</span>
+                            </button>
+                            <button id="musicBtn" onclick="toggleMusic(event)" class="music-btn-glow w-11 h-11 bg-[#1e293b] border border-white/5 hover:border-brand-light/50 rounded-xl flex items-center justify-center text-white cursor-pointer">
+                                <i id="musicIcon" class="ph-fill ph-speaker-slash text-xl text-slate-400 sound-wave-off"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="store" class="content-section">
+                <div class="flex flex-col items-center md:items-start gap-4 mb-6">
+                    <div class="flex items-center gap-2">
+                        <i class="ph-fill ph-shopping-bag-open text-2xl text-brand-light"></i>
+                        <h2 class="text-xl md:text-2xl font-bold">Katalog Produk</h2>
+                    </div>
+                    
+                    <div class="search-container flex items-center px-4 py-2">
+                        <i class="ph-bold ph-magnifying-glass text-brand-light text-base mr-2"></i>
+                        <input type="text" id="searchInput" oninput="handleSearchInput()" placeholder="Cari produk..." class="bg-transparent border-none outline-none text-white w-full text-[11px] placeholder-slate-400 font-medium">
+                    </div>
+                </div>
+                
+                <div id="displayStoreContainer" class="flex flex-col gap-6"></div>
+            </section>
+
+            <section id="jasaportofolio" class="content-section">
+                <div class="flex items-center gap-2 mb-8">
+                    <i class="ph-fill ph-laptop text-3xl text-brand-light"></i>
+                    <h2 class="text-2xl font-bold">Jasa Pembuatan Portofolio</h2>
+                </div>
+
+                <div class="flex smooth-scroll-x hide-scrollbar snap-x snap-mandatory gap-4 md:gap-6 pb-6 w-full pr-4">
+                    <!-- Kartu Starter -->
+                    <div class="inner-glass p-6 rounded-3xl flex flex-col justify-between hover:bg-[#1e293b] transition-all relative overflow-hidden w-[85vw] max-w-[320px] shrink-0 snap-center">
+                        <div class="absolute top-0 right-0 bg-brand-light/10 text-brand-light text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-brand-light/20">POPULER</div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-1 text-white">Starter Portofolio</h3>
+                            <p class="text-slate-400 text-xs mb-4">Cocok untuk personal branding & CV online interaktif.</p>
+                            <ul class="text-xs text-slate-300 space-y-2 mb-6">
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-brand-light"></i> Performa 100% Cepat Bebas Lag</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-brand-light"></i> Integrasi Musik & Jam WIB</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-brand-light"></i> Section Sosmed & Portofolio Kerja</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-brand-light"></i> Hosting & Domain Cepat</li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-white/5 pt-4 mt-2">
+                            <div><span class="text-[10px] text-slate-400 block">Harga</span><span class="font-bold text-brand-light text-lg">Rp <span id="priceStarterText">75.000</span></span></div>
+                            <button onclick="orderPortfolio('starter')" class="action-btn px-5 py-2.5 text-xs font-bold bg-brand-DEFAULT hover:bg-brand-light text-white cursor-pointer"><i class="ph-bold ph-shopping-cart"></i> Order</button>
+                        </div>
+                    </div>
+                    <!-- Kartu Premium -->
+                    <div class="inner-glass p-6 rounded-3xl flex flex-col justify-between hover:bg-[#1e293b] transition-all relative overflow-hidden w-[85vw] max-w-[320px] shrink-0 snap-center border-emerald-500/20">
+                        <div class="absolute top-0 right-0 bg-emerald-500/10 text-emerald-400 text-[10px] font-bold px-3 py-1 rounded-bl-xl border-l border-b border-emerald-500/20">PREMIUM</div>
+                        <div>
+                            <h3 class="font-bold text-xl mb-1 text-white">Pro Portofolio + Dashboard</h3>
+                            <p class="text-slate-400 text-xs mb-4">Fitur lengkap dengan Admin Control & Store Digital.</p>
+                            <ul class="text-xs text-slate-300 space-y-2 mb-6">
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-emerald-400"></i> Semua fitur Paket Starter</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-emerald-400"></i> Admin Panel Edit Live Password</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-emerald-400"></i> Fitur Store Digital & QRIS</li>
+                                <li class="flex items-center gap-2"><i class="ph-bold ph-check text-emerald-400"></i> Desain Custom & Responsive Full</li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center justify-between border-t border-white/5 pt-4 mt-2">
+                            <div><span class="text-[10px] text-slate-400 block">Harga</span><span class="font-bold text-brand-light text-lg">Rp <span id="priceProText">150.000</span></span></div>
+                            <button onclick="orderPortfolio('pro')" class="action-btn px-5 py-2.5 text-xs font-bold bg-brand-DEFAULT hover:bg-brand-light text-white cursor-pointer"><i class="ph-bold ph-shopping-cart"></i> Order</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="techstack" class="content-section">
+                <div class="flex items-center gap-2 mb-8">
+                    <i class="ph-fill ph-cpu text-3xl text-brand-light"></i>
+                    <h2 class="text-2xl font-bold">Teknologi & Tools</h2>
+                </div>
+                <div class="inner-glass rounded-3xl p-6 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex justify-center mb-6">
+                            <span class="px-4 py-1.5 bg-[#1e293b] border border-white/5 rounded-full text-xs font-semibold tracking-widest text-slate-300 flex items-center gap-2 uppercase">
+                                <div class="w-2 h-2 rounded-full bg-brand-light animate-pulse"></div> 25+ Tools Terintegrasi
+                            </span>
+                        </div>
+                        <div class="marquee-container">
+                            <div class="marquee-track left">
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg" class="w-7 h-7" alt="SQLite"><div><h4 class="font-bold text-white text-xs leading-tight">SQLite</h4><p class="text-[9px] text-slate-400">Embedded DB</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" class="w-7 h-7" alt="Python"><div><h4 class="font-bold text-white text-xs leading-tight">Python</h4><p class="text-[9px] text-slate-400">Backend & AI</p></div></div>
+                                <div class="tech-card"><i class="ph-fill ph-cursor-click text-2xl text-[#38bdf8]"></i><div><h4 class="font-bold text-white text-xs leading-tight">Cursor AI</h4><p class="text-[9px] text-slate-400">AI Code Editor</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" class="w-7 h-7 invert" alt="Vercel"><div><h4 class="font-bold text-white text-xs leading-tight">Vercel</h4><p class="text-[9px] text-slate-400">Cloud Hosting</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" class="w-7 h-7" alt="React"><div><h4 class="font-bold text-white text-xs leading-tight">React</h4><p class="text-[9px] text-slate-400">UI Library</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg" class="w-7 h-7" alt="SQLite"><div><h4 class="font-bold text-white text-xs leading-tight">SQLite</h4><p class="text-[9px] text-slate-400">Embedded DB</p></div></div>
+                            </div>
+                            <div class="marquee-track right">
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" class="w-7 h-7" alt="Tailwind"><div><h4 class="font-bold text-white text-xs leading-tight">Tailwind CSS</h4><p class="text-[9px] text-slate-400">Styling</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" class="w-7 h-7" alt="Node.js"><div><h4 class="font-bold text-white text-xs leading-tight">Node.js</h4><p class="text-[9px] text-slate-400">Runtime</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" class="w-7 h-7 invert" alt="GitHub"><div><h4 class="font-bold text-white text-xs leading-tight">GitHub</h4><p class="text-[9px] text-slate-400">Version Control</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" class="w-7 h-7" alt="Figma"><div><h4 class="font-bold text-white text-xs leading-tight">Figma</h4><p class="text-[9px] text-slate-400">UI/UX Design</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" class="w-7 h-7" alt="JavaScript"><div><h4 class="font-bold text-white text-xs leading-tight">JavaScript</h4><p class="text-[9px] text-slate-400">Logic Core</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg" class="w-7 h-7" alt="Tailwind"><div><h4 class="font-bold text-white text-xs leading-tight">Tailwind CSS</h4><p class="text-[9px] text-slate-400">Styling</p></div></div>
+                            </div>
+                            <div class="marquee-track fast">
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" class="w-7 h-7" alt="HTML5"><div><h4 class="font-bold text-white text-xs leading-tight">HTML5</h4><p class="text-[9px] text-slate-400">Markup</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" class="w-7 h-7" alt="CSS3"><div><h4 class="font-bold text-white text-xs leading-tight">CSS3</h4><p class="text-[9px] text-slate-400">Styling</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/npm/npm-original-wordmark.svg" class="w-7 h-7 bg-white rounded-md p-1" alt="NPM"><div><h4 class="font-bold text-white text-xs leading-tight">NPM</h4><p class="text-[9px] text-slate-400">Package Mgr</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" class="w-7 h-7" alt="Git"><div><h4 class="font-bold text-white text-xs leading-tight">Git</h4><p class="text-[9px] text-slate-400">Version Control</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg" class="w-7 h-7" alt="VS Code"><div><h4 class="font-bold text-white text-xs leading-tight">VS Code</h4><p class="text-[9px] text-slate-400">Code Editor</p></div></div>
+                                <div class="tech-card"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" class="w-7 h-7" alt="HTML5"><div><h4 class="font-bold text-white text-xs leading-tight">HTML5</h4><p class="text-[9px] text-slate-400">Markup</p></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="footer" class="mt-8 border-t border-white/5 pt-8 pb-6 flex flex-col items-center justify-center text-center">
+                <p class="text-xs text-slate-400 mb-1">Dibuat pada: 13 Oktober 2026</p>
+                <p class="text-sm text-slate-300 mb-5">Developed by <strong class="text-brand-light">RIFQY SAHDA PRATAMA</strong></p>
+                <div class="flex gap-4">
+                    <a id="footerIg" href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1e293b] border border-white/5 flex items-center justify-center text-slate-400 hover:text-brand-light hover:border-brand-light/30 transition-all shadow-md"><i class="ph-fill ph-instagram-logo text-lg"></i></a>
+                    <a id="footerTg" href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1e293b] border border-white/5 flex items-center justify-center text-slate-400 hover:text-brand-light hover:border-brand-light/30 transition-all shadow-md"><i class="ph-fill ph-telegram-logo text-lg"></i></a>
+                    <a id="footerWa" href="#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-[#1e293b] border border-white/5 flex items-center justify-center text-slate-400 hover:text-brand-light hover:border-brand-light/30 transition-all shadow-md"><i class="ph-fill ph-whatsapp-logo text-lg"></i></a>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        let siteConfig = {
+            profileImg: "https://cdn.phototourl.com/member/2026-10-11-70e8471c-95ca-4438-a083-5388ecaabd21.jpg",
+            name: "RIFQY SP", 
+            ig: "https://instagram.com/rifqysahda_id", telegram: "https://t.me/flyterr", wa: "https://wa.me/6285129217113",
+            audioUrl: "https://www.image2url.com/r2/default/audio/1792083112585-dfa9d872-3846-4496-aab8-e2fdfa82f889.mp3",
+            priceStarter: "75000", pricePro: "150000",
+            
+            store: [
+                { title: "Kopi Arabica Murni", price: "45000", img: "https://images.unsplash.com/photo-1559525839-b184a4d698c7?q=80&w=400&auto=format&fit=crop", category: "Kopi" },
+                { title: "Kopi Robusta Lampung", price: "35000", img: "https://images.unsplash.com/photo-1611162458324-aae1eb4129a4?q=80&w=400&auto=format&fit=crop", category: "Kopi" },
+                { title: "Sambal Cabe Rawit Super", price: "20000", img: "https://images.unsplash.com/photo-1596646549449-3663a8d1193d?q=80&w=400&auto=format&fit=crop", category: "Cabe" },
+                { title: "Cabe Merah Keriting 1Kg", price: "50000", img: "https://images.unsplash.com/photo-1588825835694-46c59b20d39e?q=80&w=400&auto=format&fit=crop", category: "Cabe" },
+                { title: "Susu Kurma Segar", price: "15000", img: "https://images.unsplash.com/photo-1596756857904-e3c3b0eb4f6c?q=80&w=400&auto=format&fit=crop", category: "Susu" },
+                { title: "Susu UHT 1 Liter", price: "18000", img: "https://images.unsplash.com/photo-1550583724-b2692b85b150?q=80&w=400&auto=format&fit=crop", category: "Susu" }
+            ]
+        };
+
+        let githubConfig = {
+            username: localStorage.getItem('gh_username') || '',
+            repo: localStorage.getItem('gh_repo') || '',
+            token: localStorage.getItem('gh_token') || '',
+            path: 'config.json'
+        };
+
+        async function loadConfig() {
+            try {
+                const response = await fetch('config.json?cache=' + new Date().getTime());
+                if (response.ok) {
+                    const remoteConfig = await response.json();
+                    siteConfig = { ...siteConfig, ...remoteConfig };
+                }
+            } catch (e) {
+                const saved = localStorage.getItem('rifqy_portfolio_config_v24'); 
+                if (saved) { try { siteConfig = { ...siteConfig, ...JSON.parse(saved) }; } catch(err){} }
+            }
+            siteConfig.audioUrl = "https://www.image2url.com/r2/default/audio/1792083112585-dfa9d872-3846-4496-aab8-e2fdfa82f889.mp3";
+            applyConfigToDOM();
+        }
+
+        async function updateGitHubConfigFile(updatedData) {
+            const { username, repo, token, path } = githubConfig;
+            if (!username || !repo || !token) { throw new Error("Mohon isi Username, Nama Repo, dan GitHub Token!"); }
+            const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${path}`;
+            let sha = "";
+            try {
+                const res = await fetch(apiUrl, { headers: { "Authorization": `Bearer ${token}`, "Accept": "application/vnd.github.v3+json" } });
+                if (res.ok) { const fileMeta = await res.json(); sha = fileMeta.sha; }
+            } catch (err) {}
+            const contentString = JSON.stringify(updatedData, null, 2);
+            const base64Content = btoa(unescape(encodeURIComponent(contentString)));
+            const putRes = await fetch(apiUrl, {
+                method: "PUT",
+                headers: { "Authorization": `Bearer ${token}`, "Content-Type": "application/json", "Accept": "application/vnd.github.v3+json" },
+                body: JSON.stringify({ message: "Update config via Admin Panel", content: base64Content, sha: sha || undefined })
+            });
+            if (!putRes.ok) { const errorData = await putRes.json(); throw new Error(errorData.message || "Gagal menyimpan ke GitHub."); }
+            return await putRes.json();
+        }
+
+        function applyConfigToDOM() {
+            document.getElementById('displayProfileImg').src = siteConfig.profileImg;
+            document.getElementById('displayProfileName').innerText = siteConfig.name;
+            document.getElementById('footerIg').href = siteConfig.ig;
+            document.getElementById('footerTg').href = siteConfig.telegram;
+            document.getElementById('footerWa').href = siteConfig.wa;
+            
+            const audioSrcEl = document.getElementById('audioSource');
+            const bgMusicEl = document.getElementById('bgMusic');
+            if (audioSrcEl && bgMusicEl) { audioSrcEl.src = siteConfig.audioUrl; bgMusicEl.load(); }
+
+            document.getElementById('priceStarterText').innerText = Number(siteConfig.priceStarter).toLocaleString('id-ID');
+            document.getElementById('priceProText').innerText = Number(siteConfig.pricePro).toLocaleString('id-ID');
+
+            renderFrontendStore();
+        }
+
+        let searchTimeout;
+        function handleSearchInput() {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => { searchStore(); }, 300);
+        }
+
+        function searchStore() {
+            const query = document.getElementById('searchInput').value;
+            renderFrontendStore(query);
+        }
+
+        function renderFrontendStore(searchQuery = '') {
+            const container = document.getElementById('displayStoreContainer');
+            const categories = [...new Set(siteConfig.store.map(item => item.category || 'Kategori Lain'))];
+            let htmlContent = '';
+
+            categories.forEach(cat => {
+                const items = siteConfig.store.filter(item => 
+                    (item.category || 'Kategori Lain') === cat && 
+                    item.title.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+                
+                if(items.length > 0) {
+                    htmlContent += `
+                    <div class="mb-4">
+                        <h3 class="font-bold text-[15px] text-white mb-3 flex items-center gap-2">
+                            <i class="ph-fill ph-storefront text-brand-light"></i>
+                            Kategori ${cat}
+                        </h3>
+                        <div class="flex smooth-scroll-x hide-scrollbar snap-x snap-mandatory gap-4 pb-4 pr-4 w-full">
+                            ${items.map(item => {
+                                const realIndex = siteConfig.store.findIndex(x => x.title === item.title && x.price === item.price);
+                                return `
+                                <div class="inner-glass p-3 rounded-2xl flex flex-col items-center hover:bg-[#1e293b] transition-colors relative overflow-hidden w-[160px] md:w-[180px] shrink-0 snap-center text-center">
+                                    <div class="w-full aspect-square bg-[#0f172a] rounded-xl overflow-hidden border border-white/5 mb-3 shrink-0">
+                                        <img src="${item.img}" alt="Product" class="w-full h-full object-cover">
+                                    </div>
+                                    <h3 class="font-bold text-[13px] text-white leading-tight mb-1 line-clamp-2">${item.title}</h3>
+                                    <span class="font-bold text-emerald-400 text-sm mb-3">Rp ${Number(item.price).toLocaleString('id-ID')}</span>
+                                    
+                                    <button onclick="orderDynamicStoreItem(${realIndex})" class="w-full justify-center py-2 text-[11px] font-bold bg-emerald-500 hover:bg-emerald-400 text-slate-900 cursor-pointer rounded-xl border-none transition-colors flex items-center gap-1">
+                                        Order
+                                    </button>
+                                </div>
+                                `
+                            }).join('')}
+                        </div>
+                    </div>
+                    `;
+                }
+            });
+
+            if (htmlContent === '') {
+                htmlContent = `<div class="w-full text-center py-10"><i class="ph-fill ph-warning-circle text-4xl text-slate-600 mb-2"></i><p class="text-slate-500 text-xs">Produk "${searchQuery}" tidak ditemukan.</p></div>`;
+            }
+            container.innerHTML = htmlContent;
+        }
+
+        function getAdminPassword() { return localStorage.getItem('admin_pwd') || '061204'; }
+        function openAdminLogin() { document.getElementById('adminLoginModal').classList.remove('hidden'); setTimeout(() => { document.getElementById('adminLoginModal').classList.add('show'); }, 10); }
+        function closeAdminLogin() { document.getElementById('adminLoginModal').classList.remove('show'); setTimeout(() => { document.getElementById('adminLoginModal').classList.add('hidden'); }, 300); document.getElementById('adminPasswordInput').value = ''; }
+        function verifyAdmin() { if (document.getElementById('adminPasswordInput').value === getAdminPassword()) { closeAdminLogin(); setTimeout(openAdminDashboard, 300); } else { alert('Password salah!'); } }
+
+        function openAdminDashboard() {
+            document.getElementById('ghUsername').value = githubConfig.username; document.getElementById('ghRepo').value = githubConfig.repo; document.getElementById('ghToken').value = githubConfig.token;
+            document.getElementById('editProfileImg').value = siteConfig.profileImg; document.getElementById('editProfileName').value = siteConfig.name;
+            
+            document.getElementById('editIg').value = siteConfig.ig; document.getElementById('editTelegram').value = siteConfig.telegram;
+            document.getElementById('editWa').value = siteConfig.wa; document.getElementById('editAudioUrl').value = siteConfig.audioUrl;
+            document.getElementById('editPriceStarter').value = siteConfig.priceStarter; document.getElementById('editPricePro').value = siteConfig.pricePro;
+            
+            renderAdminStore(); document.getElementById('adminDashboardModal').classList.remove('hidden');
+        }
+
+        function closeAdminDashboard() { document.getElementById('adminDashboardModal').classList.add('hidden'); applyConfigToDOM(); }
+
+        function renderAdminStore() {
+            document.getElementById('adminStoreContainer').innerHTML = siteConfig.store.map((item, index) => `
+                <div class="bg-[#1e293b] p-5 rounded-2xl border border-white/5 relative">
+                    <button onclick="deleteAdminStoreItem(${index})" class="absolute top-4 right-4 text-rose-500 hover:text-white hover:bg-rose-500 p-1.5 rounded-md transition-all cursor-pointer"><i class="ph-bold ph-trash"></i></button>
+                    <div class="flex flex-col gap-3 mb-3 mt-4">
+                        <div>
+                            <label class="text-[9px] text-emerald-400 uppercase font-bold mb-1 block">Nama Produk</label>
+                            <input type="text" id="storeTitle_${index}" value="${item.title}" class="w-full bg-[#0f172a] border border-white/5 rounded-lg px-3 py-2.5 text-white text-xs focus:border-emerald-400 outline-none">
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-[9px] text-emerald-400 uppercase font-bold mb-1 block">Kategori</label>
+                                <input type="text" id="storeCategory_${index}" value="${item.category || ''}" placeholder="Cth: Kopi" class="w-full bg-[#0f172a] border border-white/5 rounded-lg px-3 py-2.5 text-white text-xs focus:border-emerald-400 outline-none">
+                            </div>
+                            <div>
+                                <label class="text-[9px] text-emerald-400 uppercase font-bold mb-1 block">Harga (Angka)</label>
+                                <input type="number" id="storePrice_${index}" value="${item.price}" class="w-full bg-[#0f172a] border border-white/5 rounded-lg px-3 py-2.5 text-white text-xs focus:border-emerald-400 outline-none">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[9px] text-emerald-400 uppercase font-bold mb-1 block">URL Foto (200x200px)</label>
+                            <input type="text" id="storeImg_${index}" value="${item.img}" class="w-full bg-[#0f172a] border border-white/5 rounded-lg px-3 py-2.5 text-white text-xs focus:border-emerald-400 outline-none">
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function addAdminStoreItem() { saveCurrentInputsToConfig(); siteConfig.store.push({title: "", price: "", img: "", category: "Baru"}); renderAdminStore(); }
+        function deleteAdminStoreItem(index) { saveCurrentInputsToConfig(); siteConfig.store.splice(index, 1); renderAdminStore(); }
+
+        function saveCurrentInputsToConfig() {
+            siteConfig.store.forEach((_, i) => {
+                if(document.getElementById(`storeTitle_${i}`)) {
+                    siteConfig.store[i].title = document.getElementById(`storeTitle_${i}`).value;
+                    siteConfig.store[i].category = document.getElementById(`storeCategory_${i}`).value;
+                    siteConfig.store[i].price = document.getElementById(`storePrice_${i}`).value;
+                    siteConfig.store[i].img = document.getElementById(`storeImg_${i}`).value;
+                }
+            });
+        }
+
+        async function saveAdminChanges() {
+            const oldPwdInput = document.getElementById('editOldPassword').value;
+            const newPwdInput = document.getElementById('editNewPassword').value;
+            if (newPwdInput.trim() !== '') {
+                if (oldPwdInput !== getAdminPassword()) { alert('Password lama salah! Batal simpan.'); return; } 
+                else { localStorage.setItem('admin_pwd', newPwdInput); showToast('Password diubah!'); }
+            }
+
+            githubConfig.username = document.getElementById('ghUsername').value.trim();
+            githubConfig.repo = document.getElementById('ghRepo').value.trim();
+            githubConfig.token = document.getElementById('ghToken').value.trim();
+            localStorage.setItem('gh_username', githubConfig.username);
+            localStorage.setItem('gh_repo', githubConfig.repo);
+            localStorage.setItem('gh_token', githubConfig.token);
+
+            siteConfig.profileImg = document.getElementById('editProfileImg').value; 
+            siteConfig.name = document.getElementById('editProfileName').value;
+            siteConfig.ig = document.getElementById('editIg').value; 
+            siteConfig.telegram = document.getElementById('editTelegram').value;
+            siteConfig.wa = document.getElementById('editWa').value; 
+            siteConfig.audioUrl = document.getElementById('editAudioUrl').value;
+            siteConfig.priceStarter = document.getElementById('editPriceStarter').value; 
+            siteConfig.pricePro = document.getElementById('editPricePro').value;
+            saveCurrentInputsToConfig();
+
+            showToast('Menyimpan perubahan...');
+
+            try {
+                await updateGitHubConfigFile(siteConfig);
+                localStorage.setItem('rifqy_portfolio_config_v24', JSON.stringify(siteConfig));
+                applyConfigToDOM(); 
+                document.getElementById('adminDashboardModal').classList.add('hidden');
+                showToast('Tersimpan & tersinkronisasi!');
+            } catch (error) { alert('Gagal simpan: ' + error.message); }
+        }
+
+        let currentOrderName = '', currentOrderPrice = '', currentOrderId = '', qrisTimerInterval = null;
+        function orderPortfolio(type) { openQrisModal(type === 'starter' ? 'Starter Portofolio' : 'Pro Portofolio + Dashboard', siteConfig[type === 'starter' ? 'priceStarter' : 'pricePro']); }
+        function orderDynamicStoreItem(index) { openQrisModal(siteConfig.store[index].title, siteConfig.store[index].price); }
+        
+        function openQrisModal(packageName, priceValue) {
+            currentOrderName = packageName; currentOrderPrice = priceValue; currentOrderId = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('qrisOrderTitle').innerText = `${packageName}`;
+            document.getElementById('qrisPriceText').innerText = `Rp ${Number(priceValue).toLocaleString('id-ID')}`;
+            document.getElementById('qrisCheckoutModal').classList.remove('hidden');
+            let totalSeconds = 300; const countdownEl = document.getElementById('qrisCountdown');
+            if (qrisTimerInterval) clearInterval(qrisTimerInterval);
+            qrisTimerInterval = setInterval(() => {
+                let m = Math.floor(totalSeconds / 60), s = totalSeconds % 60;
+                countdownEl.innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                if (totalSeconds <= 0) { clearInterval(qrisTimerInterval); countdownEl.innerText = "Waktu Habis"; }
+                totalSeconds--;
+            }, 1000);
+        }
+        function closeQrisModal() { if (qrisTimerInterval) clearInterval(qrisTimerInterval); document.getElementById('qrisCheckoutModal').classList.add('hidden'); }
+        function downloadQrisImage() {
+            const a = document.createElement('a'); a.href = document.getElementById('qrisImageSrc').src;
+            a.download = `QRIS_${currentOrderId}.jpg`; document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            showToast('QRIS berhasil diunduh!');
+        }
+        function confirmManualPayment() {
+            closeQrisModal();
+            const formattedPrice = 'Rp ' + Number(currentOrderPrice).toLocaleString('id-ID');
+            const receiptText = `Halo Rifqy, saya telah melakukan pembayaran via QRIS.%0A%0A*DETAIL PESANAN*%0A------------------------------------%0A• Order ID: ${currentOrderId}%0A• Produk/Jasa: ${currentOrderName}%0A• Total Pembayaran: ${formattedPrice}%0A------------------------------------%0ABerikut saya lampirkan bukti transfernya, terima kasih!`;
+            window.location.href = `${siteConfig.wa}?text=${receiptText}`;
+        }
+
+        const bgMusic = document.getElementById('bgMusic'), musicIcon = document.getElementById('musicIcon');
+        let hasInteracted = false;
+        function updateMusicUI(isPlaying) { musicIcon.className = isPlaying ? 'ph-fill ph-speaker-high text-xl sound-wave-active' : 'ph-fill ph-speaker-slash text-xl sound-wave-off'; }
+        function playMusicInitial() { if (!hasInteracted && bgMusic) { bgMusic.play().then(() => { updateMusicUI(true); hasInteracted = true; }).catch(e => { updateMusicUI(false); }); } }
+        document.body.addEventListener('click', playMusicInitial, { once: true }); document.body.addEventListener('touchstart', playMusicInitial, { once: true });
+        function toggleMusic(event) { event.stopPropagation(); hasInteracted = true; if (bgMusic.paused) { bgMusic.play(); updateMusicUI(true); } else { bgMusic.pause(); updateMusicUI(false); } }
+
+        function switchTab(tabId, element) { const t = document.getElementById(tabId); if(t) t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
+        const mainScrollEl = document.getElementById('main-scroll');
+        const navObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    const activeNav = document.querySelector(`.nav-item[onclick*="${entry.target.getAttribute('id')}"]`);
+                    if(activeNav) activeNav.classList.add('active');
+                }
+            });
+        }, { root: mainScrollEl, rootMargin: '-40% 0px -40% 0px', threshold: 0 }); 
+        document.querySelectorAll('.content-section').forEach(section => navObserver.observe(section));
+
+        function showToast(message) { const toast = document.getElementById('toastMessage'); document.getElementById('toastText').innerText = message; toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 3000); }
+        function updateClock() {
+            const now = new Date(), t = document.getElementById('timeDisplay'), d = document.getElementById('dateDisplay');
+            if (t && d) {
+                t.textContent = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'Asia/Jakarta', hour12: false }).replace(/\./g, ':') + " WIB";
+                d.textContent = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'Asia/Jakarta' });
+            }
+        }
+        setInterval(updateClock, 1000); updateClock();
+        
+        loadConfig();
+    </script>
+</body>
+</html>
